@@ -1,6 +1,14 @@
 import db from "@repo/db/client";
 import CredentialsProvider from "next-auth/providers/credentials"
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
+import { DefaultSession } from "next-auth";
+declare module "next-auth" {
+    interface Session {
+        user: {
+            id: string
+        } & DefaultSession["user"]
+    }
+}
 
 export const authOptions = {
     providers: [
@@ -13,7 +21,7 @@ export const authOptions = {
           // TODO: User credentials type from next-aut
           async authorize(credentials: any) {
             // Do zod validation, OTP validation here
-            const hashedPassword = await bcrypt.hash(credentials.password, 10);
+            const hashedPassword = await bcrypt.hashSync(credentials.password, bcrypt.genSaltSync(10));
             const existingUser = await db.user.findFirst({
                 where: {
                     number: credentials.phone
@@ -21,7 +29,7 @@ export const authOptions = {
             });
 
             if (existingUser) {
-                const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password);
+                const passwordValidation = await bcrypt.compareSync(credentials.password, existingUser.password);
                 if (passwordValidation) {
                     return {
                         id: existingUser.id.toString(),
@@ -53,12 +61,11 @@ export const authOptions = {
           },
         })
     ],
-    secret: process.env.JWT_SECRET || "secret",
+    secret: process.env.NEXTAUTH_SECRET || "secret",
     callbacks: {
         // TODO: can u fix the type here? Using any is bad
         async session({ token, session }: any) {
             session.user.id = token.sub
-
             return session
         }
     }

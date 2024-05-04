@@ -20,8 +20,8 @@ export const OnRampTransactions = ({
     }
     return <Card title="Recent Transactions">
         <div className="pt-2">
-            {transactions.map(t => <div className="flex justify-between">
-                <div>
+            {transactions.map((t, key) => <div className="flex justify-between">
+                <div key={key}>
                     <div className="text-sm">
                         Received INR
                     </div>

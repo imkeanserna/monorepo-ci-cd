@@ -15,6 +15,9 @@ model User {
   password          String
   OnRampTransaction OnRampTransaction[]
   Balance           Balance[]
+
+  ToUserTransaction   SendTransaction[] @relation(name: "ToUserRelation")
+  FromUserTransaction SendTransaction[] @relation(name: "FromUserRelation")
 }
 
 model Merchant {
@@ -33,6 +36,18 @@ model OnRampTransaction {
   startTime DateTime
   userId    Int
   user      User         @relation(fields: [userId], references: [id])
+}
+
+model SendTransaction {
+  id        Int      @id @default(autoincrement())
+  amount    Int
+  startTime DateTime
+
+  fromUserId Int
+  fromUser   User @relation(name: "FromUserRelation", fields: [fromUserId], references: [id])
+
+  toUserId Int
+  toUser   User @relation(name: "ToUserRelation", fields: [toUserId], references: [id])
 }
 
 model Balance {
