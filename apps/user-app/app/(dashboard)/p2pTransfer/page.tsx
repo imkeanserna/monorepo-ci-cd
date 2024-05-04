@@ -5,6 +5,10 @@ import { authOptions } from "../../lib/auth";
 import prisma from "@repo/db/client";
 import { OnRampSendMoney } from "../../../components/OnRampSendMoney";
 
+const getTesting = async () => {
+    return "Testing for the ci/cd pipeline"
+}
+
 const getBalance = async () => {
     const session = await getServerSession(authOptions);
 
