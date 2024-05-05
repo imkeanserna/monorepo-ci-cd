@@ -26,15 +26,15 @@ const getSendTransaction = async () => {
     const transaction = await prisma.sendTransaction.findMany({
         where: {
             OR: [
-                { toUser: Number(session.user.id) },
-                { fromUser: Number(session.user.id) }
+                { toUserId: Number(session.user.id) },
+                { fromUserId: Number(session.user.id) }
             ]
         },
         select: {
             amount: true,
             startTime: true,
-            toUser: true,
-            fromUser: true
+            toUserId: true,
+            fromUserId: true
         }
     })
     return transaction;
