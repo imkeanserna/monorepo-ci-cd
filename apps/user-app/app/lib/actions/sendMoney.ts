@@ -50,8 +50,8 @@ export const sendMoneyTransaction = async (toUserId: string, amount: number) => 
                 data: {
                     amount: amount,
                     startTime: new Date(),
-                    toUser: Number(toUserId),
-                    fromUser: Number(fromUser)
+                    toUserId: Number(toUserId),
+                    fromUserId: Number(fromUser)
                 }
             })
         })

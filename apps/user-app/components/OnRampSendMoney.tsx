@@ -8,8 +8,8 @@ export const OnRampSendMoney = ({ transactions }: {
     transactions: {
         amount: number,
         startTime: Date,
-        toUser: number,
-        fromUser: number
+        toUserId: number,
+        fromUserId: number
     }[]
 }) => {
     const session = useSession();
@@ -24,7 +24,7 @@ export const OnRampSendMoney = ({ transactions }: {
             <div>
                 {transactions.map((value, key) => {
                         return <div key={key} className="flex justify-between">
-                            {value.toUser !== Number(session.data?.user.id)
+                            {value.toUserId !== Number(session.data?.user.id)
                                 ?
                                 <>
                                     <div>
