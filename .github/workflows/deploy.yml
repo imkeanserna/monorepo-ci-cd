@@ -28,3 +28,15 @@ jobs:
 
       - name: Verify Pushed Image
         run: docker pull imkeanserna/user-app-monorepo:latest
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with: 
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo docker pull imkeanserna/user-app-monorepo:latest
+            sudo docker stop web-app || true
+            sudo docker rm web-app || true
+            sudo docker run --restart=always --name web-app -p 3005:3000 -d imkeanserna/user-app-monorepo:latest
